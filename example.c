@@ -1,5 +1,21 @@
+//
+//
+// Pontifícia Universidade Católica do Paraná
+// Escola Politécnica
+// Bacharelado em Ciência da Computação
+// Disciplina: Sistemas Operacionais Ciberfísicos
+// Professor: Jhonatan Geremias
+// Estudantes:	Jorge Jordão
+//		Josiel Queiroz Jr.
+//		Mateus Alves Ramos
+// Projeto FreeRTOS - Fase 1 (Tarefas FreeRTOS)
+//						Curitiba, 21 de setembro de 2024
+//-------------------------------------------------------------------------------------
+
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -20,14 +36,16 @@ int motor_3 = 0;
 void taskArfagem(void* pvParameters);
 //Função de rolagem
 void taskRolagem(void* pvParameters);
-
+//Função de guinada
+void taskGuinada(void* pvParameters);
 
 int main_(void)
 {
 
 	xTaskCreate(taskArfagem, "taskArfagem", STACK_SIZE, (void*)"frente", 1, NULL);
 	xTaskCreate(taskRolagem, "taskRolagem", STACK_SIZE, (void*)"direita", 1, NULL);
-
+	// Realizando a criação da tarefa, definindo a mesma prioridade das outras (prioridade 1) e passando o sentido da guinda.
+	xTaskCreate(taskGuinada, "taskGuinada", STACK_SIZE, (void*)"horario", 1, NULL);
 
 	vTaskStartScheduler();
 
@@ -63,7 +81,7 @@ void taskArfagem(void* pvParameters)
 		}
 
 		vPrintString(direction);
-		printf("ARFAGEM | motor 0: %d |  motor 1: %d | motor 2: %d |  motor 3: %d", motor_0, motor_1, motor_2, motor_3);
+		printf(" | ARFAGEM \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d \n\n", motor_0, motor_1, motor_2, motor_3);
 
 		// Simula o delay de 40ms para a rolagem
 		vTaskDelay(pdMS_TO_TICKS(40));
@@ -94,12 +112,46 @@ void taskRolagem(void* pvParameters) {
 		}
 
 		vPrintString(direction);
-		printf("ROLAGEM | motor 0: %d |  motor 1: %d | motor 2: %d |  motor 3: %d", motor_0, motor_1, motor_2, motor_3);
+		printf(" | ROLAGEM \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d\n\n", motor_0, motor_1, motor_2, motor_3);
 
 		// Simula o delay de 20ms para a rolagem
 		vTaskDelay(pdMS_TO_TICKS(20));
 	}
 
 	// Exclui a tarefa
+	vTaskDelete(NULL);
+}
+
+// Funcao que define a funcionalidade de guinada do quadricoptero
+void taskGuinada(void* pvParameters)
+{
+	//Cadeia de char (string) de entrada, que definirá se o movimento de guindada será no sentido horário ou antihorário
+	char* sense = (char*)pvParameters;
+
+	//Início do loop
+	for (;;)
+	{
+		//Verificação da direção no qual será realizada a guinada
+		if (strcmp(sense, "horario") == 0) { // Caso a ação seja "horário", o strcmp() retornará 0, entrando no if
+			motor_0 += 100;
+			motor_1 -= 100;
+			motor_2 += 100;
+			motor_3 -= 100;
+		}
+		else if (strcmp(sense, "anti-horario") == 0) { // Caso a ação seja "anti-horário", o strcmp() retornará 0, entrando no else if
+			motor_0 -= 100;
+			motor_1 += 100;
+			motor_2 -= 100;
+			motor_3 += 100;
+		}
+
+		vPrintString(sense);
+		printf(" | GUINADA \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d\n\n", motor_0, motor_1, motor_2, motor_3);
+
+		// Simula o delay de 10ms para a guinada
+		vTaskDelay(pdMS_TO_TICKS(10));
+	}
+
+	//Ralizando a exclusão explícita da tarefa quando não for mais utilizada
 	vTaskDelete(NULL);
 }

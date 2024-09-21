@@ -1,6 +1,7 @@
-﻿cl : linha de comando  warning D9035: opção 'Gm' foi preterida e será removida em uma versão futura
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   example.c
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(104,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(35,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(73,1): warning C4702: código inacessível
-  WIN32.vcxproj -> C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(91,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(53,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(122,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(156,1): warning C4702: unreachable code
+  WIN32.vcxproj -> C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe

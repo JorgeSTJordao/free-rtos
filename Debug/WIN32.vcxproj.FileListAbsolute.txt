@@ -1,2 +1,3 @@
 C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\Atividade Pratica 1\Debug\Exemplo_04.exe
 C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
