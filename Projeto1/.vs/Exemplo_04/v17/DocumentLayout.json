@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\jorge\\Documentos\\Universidade\\Mat\u00E9rias\\4\u00BA Semestre\\Sistemas Operacionais Ciberf\u00EDsicos\\FreeRTOS_PUCPR\\FreeRTOS\\Demo\\Atividade Pratica 1\\",
+  "WorkspaceRootPath": "C:\\Users\\jorge\\OneDrive\\GitHub\\free-rtos\\Projeto1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C686325E-3261-42F7-AEB1-DDE5280E1CEB}|WIN32.vcxproj|C:\\Users\\jorge\\Documentos\\Universidade\\Mat\u00E9rias\\4\u00BA Semestre\\Sistemas Operacionais Ciberf\u00EDsicos\\FreeRTOS_PUCPR\\FreeRTOS\\Demo\\Atividade Pratica 1\\example.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{C686325E-3261-42F7-AEB1-DDE5280E1CEB}|WIN32.vcxproj|C:\\Users\\jorge\\OneDrive\\GitHub\\free-rtos\\Projeto1\\example.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C686325E-3261-42F7-AEB1-DDE5280E1CEB}|WIN32.vcxproj|solutionrelative:example.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "example.c",
-              "DocumentMoniker": "C:\\Users\\jorge\\Documentos\\Universidade\\Mat\u00E9rias\\4\u00BA Semestre\\Sistemas Operacionais Ciberf\u00EDsicos\\FreeRTOS_PUCPR\\FreeRTOS\\Demo\\Atividade Pratica 1\\example.c",
+              "DocumentMoniker": "C:\\Users\\jorge\\OneDrive\\GitHub\\free-rtos\\Projeto1\\example.c",
               "RelativeDocumentMoniker": "example.c",
-              "ToolTip": "C:\\Users\\jorge\\Documentos\\Universidade\\Mat\u00E9rias\\4\u00BA Semestre\\Sistemas Operacionais Ciberf\u00EDsicos\\FreeRTOS_PUCPR\\FreeRTOS\\Demo\\Atividade Pratica 1\\example.c",
-              "RelativeToolTip": "example.c",
-              "ViewState": "AQIAABMAAAAAAAAAAAAIwHgAAAAAAAAA",
+              "ToolTip": "C:\\Users\\jorge\\OneDrive\\GitHub\\free-rtos\\Projeto1\\example.c*",
+              "RelativeToolTip": "example.c*",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-08-21T18:45:05.88Z",
               "EditorCaption": ""
