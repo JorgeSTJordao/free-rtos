@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -50,6 +51,9 @@ void taskRolagem(void *pvParameters) {
             motor_1 += 50;
             motor_2 += 50;
         }
+
+        printf("\nRolagem: %s", direcao);
+		printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
 
         // Simula o delay de 20ms para a rolagem
         vTaskDelay(pdMS_TO_TICKS(20));
