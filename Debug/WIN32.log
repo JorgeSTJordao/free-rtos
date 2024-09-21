@@ -1,13 +1,6 @@
 ﻿cl : linha de comando  warning D9035: opção 'Gm' foi preterida e será removida em uma versão futura
-  Run-time-stats-utils.c
-  main.c
   example.c
-  basic_io.c
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(56,32): warning C4244: 'função': conversão de 'float' para 'unsigned long', possível perda de dados
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(83,32): warning C4244: 'função': conversão de 'float' para 'unsigned long', possível perda de dados
-  Gerando Código...
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(98,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(41,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(119,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(68,1): warning C4702: código inacessível
+C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(104,1): warning C4702: código inacessível
+C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(35,1): warning C4702: código inacessível
+C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(73,1): warning C4702: código inacessível
   WIN32.vcxproj -> C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
