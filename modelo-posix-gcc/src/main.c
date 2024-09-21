@@ -34,16 +34,16 @@ int main(void) {
 
 // Funcao que define a funcionalidade de rolagem do quadricoptero
 void taskRolagem(void *pvParameters) {
-    char* direction = (char*) pvParameters;
+    char* direcao = (char*) pvParameters;
 
     for (;;) {
-        if (strcmp(direction, "direita") == 0) {
+        if (strcmp(direcao, "direita") == 0) {
             // Alteracao para rolagem para a direita
             motor_0 += 50;
             motor_3 += 50;
             motor_1 -= 50;
             motor_2 -= 50;
-        } else if (strcmp(direction, "esquerda") == 0) {
+        } else if (strcmp(direcao, "esquerda") == 0) {
             // Alteracao para rolagem para a esquerda
             motor_0 -= 50;
             motor_3 -= 50;
