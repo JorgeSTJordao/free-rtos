@@ -1,157 +1,177 @@
-//
-//
-// Pontifícia Universidade Católica do Paraná
-// Escola Politécnica
-// Bacharelado em Ciência da Computação
-// Disciplina: Sistemas Operacionais Ciberfísicos
-// Professor: Jhonatan Geremias
-// Estudantes:	Jorge Jordão
-//		Josiel Queiroz Jr.
-//		Mateus Alves Ramos
-// Projeto FreeRTOS - Fase 1 (Tarefas FreeRTOS)
-//						Curitiba, 21 de setembro de 2024
-//-------------------------------------------------------------------------------------
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "FreeRTOS.h"
 #include "task.h"
-#include "basic_io.h"
+#include "semphr.h"  // Para usar semáforos
 
-// Definindo o tamanho padrao da pilha para facilitar manutencao
 #define STACK_SIZE 1000
+#define RADIO_FREQ_PRIORITY 1
+#define MANEUVER_PRIORITY 2
+#define STRING_SIZE 10
 
-// Variaveis que simulam a velocidade dos motores
-int motor_0 = 0;
-int motor_1 = 0;
-int motor_2 = 0;
-int motor_3 = 0;
+// Variáveis globais com modificador volatile
+volatile char sentido[STRING_SIZE] = "horario";
+volatile char direcao[STRING_SIZE] = "frente";
+volatile char orientacao[STRING_SIZE] = "direita";
 
-//Protótipos das tarefas
+// Variáveis que simulam a velocidade dos motores
+volatile int motor_0 = 0;
+volatile int motor_1 = 0;
+volatile int motor_2 = 0;
+volatile int motor_3 = 0;
+
+// Semáforo binário
+SemaphoreHandle_t xSemaphore = NULL;
+
+// Protótipos das funções
+
+void taskRolagem(void* pvParameters);
+void taskArfagem(void* pvParameters);
+void taskGuinada(void* pvParameters);
+void taskRadioFrequencia(void* pvParameters);
+
+int main(void) {
+    // Criação do semáforo binário
+    vSemaphoreCreateBinary(xSemaphore);
+
+    if (xSemaphore != NULL) {
+
+        // Criação das tarefas de manobra
+        xTaskCreate(taskRolagem, "Rolagem", STACK_SIZE, (void*)orientacao, MANEUVER_PRIORITY, NULL);
+        xTaskCreate(taskArfagem, "Arfagem", STACK_SIZE, (void*)direcao, MANEUVER_PRIORITY, NULL);
+        xTaskCreate(taskGuinada, "Guinada", STACK_SIZE, (void*)sentido, MANEUVER_PRIORITY, NULL);
+
+        // Criação da tarefa de rádio frequência
+        xTaskCreate(taskRadioFrequencia, "RadioFreq", STACK_SIZE, NULL, RADIO_FREQ_PRIORITY, NULL);
+
+        // Inicia o agendador de tarefas
+        vTaskStartScheduler();
+    }
+
+    for (;;);
+    return 0;
+}
+
+// Função de rolagem
+void taskRolagem(void* pvParameters) {
+    char* orientacaoLocal = (char*)pvParameters;
+
+    for (;;) {
+        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
+            if (strcmp(orientacaoLocal, "direita") == 0) {
+                motor_0 += 50;
+                motor_3 += 50;
+                motor_1 -= 50;
+                motor_2 -= 50;
+            }
+            else if (strcmp(orientacaoLocal, "esquerda") == 0) {
+                motor_0 -= 50;
+                motor_3 -= 50;
+                motor_1 += 50;
+                motor_2 += 50;
+            }
+
+            printf("\nRolagem: %s", orientacaoLocal);
+            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
+
+            xSemaphoreGive(xSemaphore);
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
 
 //Função de arfagem
-void taskArfagem(void* pvParameters);
-//Função de rolagem
-void taskRolagem(void* pvParameters);
-//Função de guinada
-void taskGuinada(void* pvParameters);
+void taskArfagem(void* pvParameters) {
+    char* direcaoLocal = (char*)pvParameters;
 
-int main_(void)
-{
+    //Início do loop
+    for (;;)
 
-	xTaskCreate(taskArfagem, "taskArfagem", STACK_SIZE, (void*)"frente", 1, NULL);
-	xTaskCreate(taskRolagem, "taskRolagem", STACK_SIZE, (void*)"direita", 1, NULL);
-	// Realizando a criação da tarefa, definindo a mesma prioridade das outras (prioridade 1) e passando o sentido da guinda.
-	xTaskCreate(taskGuinada, "taskGuinada", STACK_SIZE, (void*)"horario", 1, NULL);
+    {
+        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
+            //Verificação de direção da arfagem (frente ou trás)
+            if (strcmp(direcaoLocal, "frente") == 0) {
+                motor_2 += 25;
+                motor_3 += 25;
+                motor_0 -= 25;
+                motor_1 -= 25;
 
-	vTaskStartScheduler();
+            }
+            else if (strcmp(direcaoLocal, "trás") == 0) {
+                motor_2 -= 25;
+                motor_3 -= 25;
+                motor_0 += 25;
+                motor_1 += 25;
+            }
 
-	for (;; );
-	return 0;
+            printf("\Arfagem: %s", direcaoLocal);
+            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
+
+            xSemaphoreGive(xSemaphore);
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(40));
+    }
+
+    vTaskDelete(NULL);
 }
 
-// Funcao que define a funcionalidade de arfagem do quadricoptero
-void taskArfagem(void* pvParameters)
-{
+// Função de guinada
+void taskGuinada(void* pvParameters) {
+    char* sentidoLocal = (char*)pvParameters;
 
-	char* direction = (char*)pvParameters;
+    for (;;) {
+        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
+            //Verificação da direção no qual será realizada a guinada
+            if (strcmp(sentidoLocal, "horario") == 0) { // Caso a ação seja "horário", o strcmp() retornará 0, entrando no if
+                motor_0 += 100;
+                motor_1 -= 100;
+                motor_2 += 100;
+                motor_3 -= 100;
+            }
+            else if (strcmp(sentidoLocal, "anti-horario") == 0) { // Caso a ação seja "anti-horário", o strcmp() retornará 0, entrando no else if
+                motor_0 -= 100;
+                motor_1 += 100;
+                motor_2 -= 100;
+                motor_3 += 100;
+            }
 
-	//Início do loop
-	for (;;)
+            printf("\nGuinada: %s", sentidoLocal);
+            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
 
-	{
-		//Direção vertical
-		//Sentido: frente
-		if (strcmp(direction, "frente") == 0) {
-			motor_2 += 25;
-			motor_3 += 25;
-			motor_0 -= 25;
-			motor_1 -= 25;
+            xSemaphoreGive(xSemaphore);
+        }
 
-		}
-		//Sentido: trás
-		else if (strcmp(direction, "trás") == 0) {
-			motor_2 -= 25;
-			motor_3 -= 25;
-			motor_0 += 25;
-			motor_1 += 25;
-		}
-
-		vPrintString(direction);
-		printf(" | ARFAGEM \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d \n\n", motor_0, motor_1, motor_2, motor_3);
-
-		// Simula o delay de 40ms para a rolagem
-		vTaskDelay(pdMS_TO_TICKS(40));
-	}
-
-	//Tarefa de arfagem deletada
-	vTaskDelete(NULL);
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
 }
 
-// Funcao que define a funcionalidade de rolagem do quadricoptero
-void taskRolagem(void* pvParameters) {
-	char* direction = (char*)pvParameters;
+// Função de rádio frequência
+void taskRadioFrequencia(void* pvParameters) {
+    for (;;) {
+        if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
+            // Sorteio e modificação das variáveis "sentido", "direção" e "orientação"
+            int rand_val = rand() % 100;
 
-	for (;;) {
-		if (strcmp(direction, "direita") == 0) {
-			// Alteracao para rolagem para a direita
-			motor_0 += 50;
-			motor_3 += 50;
-			motor_1 -= 50;
-			motor_2 -= 50;
-		}
-		else if (strcmp(direction, "esquerda") == 0) {
-			// Alteracao para rolagem para a esquerda
-			motor_0 -= 50;
-			motor_3 -= 50;
-			motor_1 += 50;
-			motor_2 += 50;
-		}
+            if (rand_val % 2 == 0) {
+                printf((char*)sentido, "horario");
+                printf((char*)direcao, "frente");
+                printf((char*)orientacao, "direita");
+            }
+            else {
+                printf((char*)sentido, "antihorario");
+                printf((char*)direcao, "trás");
+                printf((char*)orientacao, "esquerda");
+            }
 
-		vPrintString(direction);
-		printf(" | ROLAGEM \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d\n\n", motor_0, motor_1, motor_2, motor_3);
+            printf("\nRadio Frequência alterou as manobras");
+            printf("\nSentido: %s, Direção: %s, Orientação: %s", sentido, direcao, orientacao);
 
-		// Simula o delay de 20ms para a rolagem
-		vTaskDelay(pdMS_TO_TICKS(20));
-	}
+            xSemaphoreGive(xSemaphore);
+        }
 
-	// Exclui a tarefa
-	vTaskDelete(NULL);
-}
-
-// Funcao que define a funcionalidade de guinada do quadricoptero
-void taskGuinada(void* pvParameters)
-{
-	//Cadeia de char (string) de entrada, que definirá se o movimento de guindada será no sentido horário ou antihorário
-	char* sense = (char*)pvParameters;
-
-	//Início do loop
-	for (;;)
-	{
-		//Verificação da direção no qual será realizada a guinada
-		if (strcmp(sense, "horario") == 0) { // Caso a ação seja "horário", o strcmp() retornará 0, entrando no if
-			motor_0 += 100;
-			motor_1 -= 100;
-			motor_2 += 100;
-			motor_3 -= 100;
-		}
-		else if (strcmp(sense, "anti-horario") == 0) { // Caso a ação seja "anti-horário", o strcmp() retornará 0, entrando no else if
-			motor_0 -= 100;
-			motor_1 += 100;
-			motor_2 -= 100;
-			motor_3 += 100;
-		}
-
-		vPrintString(sense);
-		printf(" | GUINADA \nmotor 0: %d \nmotor 1: %d \nmotor 2: %d \nmotor 3: %d\n\n", motor_0, motor_1, motor_2, motor_3);
-
-		// Simula o delay de 10ms para a guinada
-		vTaskDelay(pdMS_TO_TICKS(10));
-	}
-
-	//Ralizando a exclusão explícita da tarefa quando não for mais utilizada
-	vTaskDelete(NULL);
+        vTaskDelay(pdMS_TO_TICKS(100));  // Atraso de 100ms
+    }
 }
