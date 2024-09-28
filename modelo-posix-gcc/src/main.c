@@ -75,7 +75,7 @@ void taskRolagem(void *pvParameters) {
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(portTICK_RATE_MS * 20);
     }
 }
 
@@ -106,7 +106,7 @@ void taskGuinada(void *pvParameters) {
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(portTICK_RATE_MS * 10);
     }
 }
 
@@ -133,6 +133,6 @@ void taskRadioFrequencia(void *pvParameters) {
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100));  // Atraso de 100ms
+        vTaskDelay(portTICK_RATE_MS * 100);  // Gerando um atraso de 100ms em Ticks
     }
 }
