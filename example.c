@@ -128,7 +128,7 @@ void taskArfagem(void* pvParameters) {
             }
 
             // Impressão das informações: nome da manobra, direção e informações da velocidade dos motores
-            printf("\Arfagem: %s", direcaoLocal);
+            printf("\nArfagem: %s", direcaoLocal);
             printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
             // Aqui ocorre a liberação do semáforo para ser utilizado por outra tarefa (necessário após o uso do xSemaphoreTake())
