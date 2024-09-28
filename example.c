@@ -11,30 +11,30 @@
 //						Curitiba, 28 de setembro de 2024
 //-------------------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"  // Para usar semáforos
+#include <stdio.h> // Biblioteca padrão de entrada/saída, usada para funções como printf
+#include <stdlib.h> // Biblioteca necessária para utilizar funções como rand()
+#include <string.h> // Biblioteca de manipulação de strings, usada para funções como strcmp()
+#include "FreeRTOS.h" // Biblioteca principal do FreeRTOS, necessária para usar os recursos do sistema operacional
+#include "task.h" // Biblioteca do FreeRTOS para a criação e gerenciamento de tarefas
+#include "semphr.h" // Biblioteca do FreeRTOS para usar semáforos
 
-#define STACK_SIZE 1000
-#define RADIO_FREQ_PRIORITY 1
-#define MANEUVER_PRIORITY 2
-#define STRING_SIZE 12 // Com tamanho 10 eh exibido erro devido o tamanho da palavra ANTIHORARIO
+#define STACK_SIZE 1000 // Definindo uma constante para o tamanho das pilhas das tarefas (facilita a manutenção)
+#define RADIO_FREQ_PRIORITY 1 // Constate para a prioridade da tarefa de radiofrequência (menor que as demais)
+#define MANEUVER_PRIORITY 2 // Constate para a prioridade das demais tarefas (manobras (MANEUVER))
+#define STRING_SIZE 12 // Constante para definir o tamanho máximo das Strings. Com tamanho 10 é exibido erro devido o tamanho da palavra ANTIHORARIO
 
-// Variáveis globais com modificador volatile
+// Variáveis globais com modificador volatile (definidas com um tamanho fixo de caracteres para evitar alocação dinâmica de recursos)
 volatile char sentido[STRING_SIZE];
 volatile char direcao[STRING_SIZE];
 volatile char orientacao[STRING_SIZE];
 
-// Variáveis que simulam a velocidade dos motores
+// Variáveis globais que simulam a velocidade dos motores
 volatile long motor_0;
 volatile long motor_1;
 volatile long motor_2;
 volatile long motor_3;
 
-// Semáforo binário
+// Macro para definir um Semáforo binário
 SemaphoreHandle_t xSemaphore = NULL;
 
 // Protótipos das funções
@@ -57,7 +57,7 @@ int main_(void) {
         // Criação da tarefa de rádio frequência
         xTaskCreate(taskRadioFrequencia, "RadioFreq", STACK_SIZE, NULL, RADIO_FREQ_PRIORITY, NULL);
 
-        // Inicia o agendador de tarefas
+        // Inicia o agendador (escalonador) de tarefas
         vTaskStartScheduler();
     }
 
@@ -70,7 +70,9 @@ void taskRolagem(void* pvParameters) {
     char* orientacaoLocal = (char*)pvParameters;
 
     for (;;) {
+        // Aqui a tarefa verifica se o semáforo pode ser obtido (retorna "pdTRUE"), caso não possa deixa esta tarefa como "bloqueada" até que o semáforo seja liberado (portMAX_DELAY, tempo indeterminado)
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
+            // Verificação se a manobra é para a direita ou para a esquerda
             if (strcmp(orientacaoLocal, "direita") == 0) {
                 motor_0 += 50;
                 motor_3 += 50;
@@ -84,14 +86,20 @@ void taskRolagem(void* pvParameters) {
                 motor_2 += 50;
             }
 
+            // Impressão das informações: nome da manobra, orientação e informações da velocidade dos motores
             printf("\nRolagem: %s", orientacaoLocal);
             printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
+            // Aqui ocorre a liberação do semáforo para ser utilizado por outra tarefa (necessário após o uso do xSemaphoreTake())
             xSemaphoreGive(xSemaphore);
         }
 
+        // Libera o processador, durante 20ms, para executar outra tarefa
         vTaskDelay(portTICK_RATE_MS * 20);
     }
+
+    // Exclusão explícita da tarefa
+    vTaskDelete(NULL);
 }
 
 //Função de arfagem
@@ -102,6 +110,7 @@ void taskArfagem(void* pvParameters) {
     for (;;)
 
     {
+        // Aqui a tarefa verifica se o semáforo pode ser obtido (retorna "pdTRUE"), caso não possa deixa esta tarefa como "bloqueada" até que o semáforo seja liberado
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
             //Verificação de direção da arfagem (frente ou trás)
             if (strcmp(direcaoLocal, "frente") == 0) {
@@ -118,15 +127,19 @@ void taskArfagem(void* pvParameters) {
                 motor_1 += 25;
             }
 
+            // Impressão das informações: nome da manobra, direção e informações da velocidade dos motores
             printf("\Arfagem: %s", direcaoLocal);
             printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
+            // Aqui ocorre a liberação do semáforo para ser utilizado por outra tarefa (necessário após o uso do xSemaphoreTake())
             xSemaphoreGive(xSemaphore);
         }
 
+        // Libera o processador, durante 40ms, para executar outra tarefa
         vTaskDelay(portTICK_RATE_MS * 40);
     }
 
+    // Exclusão explícita da tarefa
     vTaskDelete(NULL);
 }
 
@@ -135,6 +148,7 @@ void taskGuinada(void* pvParameters) {
     char* sentidoLocal = (char*)pvParameters;
 
     for (;;) {
+        // Aqui a tarefa verifica se o semáforo pode ser obtido (retorna "pdTRUE"), caso não possa deixa esta tarefa como "bloqueada" até que o semáforo seja liberado
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
             //Verificação da direção no qual será realizada a guinada
             if (strcmp(sentidoLocal, "horario") == 0) { // Caso a ação seja "horário", o strcmp() retornará 0, entrando no if
@@ -150,28 +164,37 @@ void taskGuinada(void* pvParameters) {
                 motor_3 += 100;
             }
 
+            // // Impressão das informações: nome da manobra, sentido e informações da velocidade dos motores
             printf("\nGuinada: %s", sentidoLocal);
             printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
+            // Aqui ocorre a liberação do semáforo para ser utilizado por outra tarefa (necessário após o uso xSemaphoreTake())
             xSemaphoreGive(xSemaphore);
         }
 
+        // Libera o processador, durante 10ms, para executar outra tarefa
         vTaskDelay(portTICK_RATE_MS * 10);
     }
+
+    // Exclusão explícita da tarefa
+    vTaskDelete(NULL);
 }
 
 // Função de rádio frequência
 void taskRadioFrequencia(void* pvParameters) {
     for (;;) {
+        // Aqui a tarefa verifica se o semáforo pode ser obtido (retorna "pdTRUE"), caso não possa deixa esta tarefa como "bloqueada" até que o semáforo seja liberado
         if (xSemaphoreTake(xSemaphore, portMAX_DELAY) == pdTRUE) {
             // Sorteio e modificação das variáveis "sentido", "direção" e "orientação"
             int rand_val = rand() % 100;
 
+            // Caso os números forem pares...
             if (rand_val % 2 == 0) {
                 sprintf((char*)sentido, "horario");
                 sprintf((char*)direcao, "frente");
                 sprintf((char*)orientacao, "direita");
             }
+            // Caso forem impares...
             else {
                 sprintf((char*)sentido, "antihorario");
                 sprintf((char*)direcao, "trás");
@@ -181,10 +204,14 @@ void taskRadioFrequencia(void* pvParameters) {
             printf("\nRadio Frequência alterou as manobras");
             printf("\nSentido: %s, Direção: %s, Orientação: %s", sentido, direcao, orientacao);
 
+            // Aqui ocorre a liberação do semáforo para ser utilizado por outra tarefa (necessário após o uso xSemaphoreTake())
             xSemaphoreGive(xSemaphore);
         }
 
 
         vTaskDelay(portTICK_RATE_MS * 100);  // Gerando um atraso de 100ms em Ticks
     }
+
+    // Exclusão explícita da tarefa
+    vTaskDelete(NULL);
 }

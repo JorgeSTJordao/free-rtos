@@ -1,7 +1,10 @@
-﻿cl : linha de comando  warning D9035: opção 'Gm' foi preterida e será removida em uma versão futura
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   example.c
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(121,20): warning C4129: "A": sequência de escape de caracteres não reconhecida
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(164,32): warning C4100: 'pvParameters': parâmetro formal não referenciado
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(130,1): warning C4702: código inacessível
-C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(65,1): warning C4702: código inacessível
-  WIN32.vcxproj -> C:\Users\jorge\Documentos\Universidade\Matérias\4º Semestre\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(131,20): warning C4129: 'A': unrecognized character escape sequence
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(184,32): warning C4100: 'pvParameters': unreferenced formal parameter
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(216,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(102,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(143,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(180,1): warning C4702: unreachable code
+C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\example.c(65,1): warning C4702: unreachable code
+  WIN32.vcxproj -> C:\Users\Samsung\OneDrive - Grupo Marista\4º Período\Sistemas Operacionais Ciberfísicos\FreeRTOS_PUCPR\FreeRTOS\Demo\free-rtos\Debug\Exemplo_04.exe
