@@ -1,3 +1,16 @@
+//
+// Pontifícia Universidade Católica do Paraná
+// Escola Politécnica
+// Bacharelado em Ciência da Computação
+// Disciplina: Sistemas Operacionais Ciberfísicos
+// Professor: Jhonatan Geremias
+// Estudantes:	Jorge Jordão
+//		Josiel Queiroz Jr.
+//		Mateus Alves Ramos
+// Projeto FreeRTOS - Fase 2 (Tarefas FreeRTOS)
+//						Curitiba, 28 de setembro de 2024
+//-------------------------------------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,30 +21,29 @@
 #define STACK_SIZE 1000
 #define RADIO_FREQ_PRIORITY 1
 #define MANEUVER_PRIORITY 2
-#define STRING_SIZE 10
+#define STRING_SIZE 12 // Com tamanho 10 eh exibido erro devido o tamanho da palavra ANTIHORARIO
 
 // Variáveis globais com modificador volatile
-volatile char sentido[STRING_SIZE] = "horario";
-volatile char direcao[STRING_SIZE] = "frente";
-volatile char orientacao[STRING_SIZE] = "direita";
+volatile char sentido[STRING_SIZE];
+volatile char direcao[STRING_SIZE];
+volatile char orientacao[STRING_SIZE];
 
 // Variáveis que simulam a velocidade dos motores
-volatile int motor_0 = 0;
-volatile int motor_1 = 0;
-volatile int motor_2 = 0;
-volatile int motor_3 = 0;
+volatile long motor_0;
+volatile long motor_1;
+volatile long motor_2;
+volatile long motor_3;
 
 // Semáforo binário
 SemaphoreHandle_t xSemaphore = NULL;
 
 // Protótipos das funções
-
 void taskRolagem(void* pvParameters);
 void taskArfagem(void* pvParameters);
 void taskGuinada(void* pvParameters);
 void taskRadioFrequencia(void* pvParameters);
 
-int main(void) {
+int main_(void) {
     // Criação do semáforo binário
     vSemaphoreCreateBinary(xSemaphore);
 
@@ -73,12 +85,12 @@ void taskRolagem(void* pvParameters) {
             }
 
             printf("\nRolagem: %s", orientacaoLocal);
-            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
+            printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(portTICK_RATE_MS * 20);
     }
 }
 
@@ -107,12 +119,12 @@ void taskArfagem(void* pvParameters) {
             }
 
             printf("\Arfagem: %s", direcaoLocal);
-            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
+            printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(40));
+        vTaskDelay(portTICK_RATE_MS * 40);
     }
 
     vTaskDelete(NULL);
@@ -139,12 +151,12 @@ void taskGuinada(void* pvParameters) {
             }
 
             printf("\nGuinada: %s", sentidoLocal);
-            printf("\nVelocidade MOTOR 0: %d \nVelocidade MOTOR 1: %d \nVelocidade MOTOR 2: %d \nVelocidade MOTOR 3: %d\n", motor_0, motor_1, motor_2, motor_3);
+            printf("\nVelocidade MOTOR 0: %ld \nVelocidade MOTOR 1: %ld \nVelocidade MOTOR 2: %ld \nVelocidade MOTOR 3: %ld\n", motor_0, motor_1, motor_2, motor_3);
 
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(portTICK_RATE_MS * 10);
     }
 }
 
@@ -156,14 +168,14 @@ void taskRadioFrequencia(void* pvParameters) {
             int rand_val = rand() % 100;
 
             if (rand_val % 2 == 0) {
-                printf((char*)sentido, "horario");
-                printf((char*)direcao, "frente");
-                printf((char*)orientacao, "direita");
+                sprintf((char*)sentido, "horario");
+                sprintf((char*)direcao, "frente");
+                sprintf((char*)orientacao, "direita");
             }
             else {
-                printf((char*)sentido, "antihorario");
-                printf((char*)direcao, "trás");
-                printf((char*)orientacao, "esquerda");
+                sprintf((char*)sentido, "antihorario");
+                sprintf((char*)direcao, "trás");
+                sprintf((char*)orientacao, "esquerda");
             }
 
             printf("\nRadio Frequência alterou as manobras");
@@ -172,6 +184,7 @@ void taskRadioFrequencia(void* pvParameters) {
             xSemaphoreGive(xSemaphore);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100));  // Atraso de 100ms
+
+        vTaskDelay(portTICK_RATE_MS * 100);  // Gerando um atraso de 100ms em Ticks
     }
 }
